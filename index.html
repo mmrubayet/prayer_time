@@ -124,7 +124,7 @@
                     this.message = 'Loading...',
                     axios({
                         method: 'get', 
-                        url: `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=6e684d6becd04869ac72c67bebb84640`,
+                        url: `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=6e684d6becd04869ac72c67bebb84640`,
                     }).then(response => {
                         this.city_data = response.data[0];
                         this.city_name = response.data[0].name;
@@ -137,7 +137,7 @@
                     this.message = 'Loading...',
                     axios({
                         method: 'get',
-                        url: 'http://api.aladhan.com/v1/calendar?latitude=' + lat + '&longitude=' + lon + '&method=2&month=7&year=2022',
+                        url: 'https://api.aladhan.com/v1/calendar?latitude=' + lat + '&longitude=' + lon + '&method=1&month=7&year=2022',
                     }).then(response => {
                         this.timing_list = response.data.data;
                         this.get_CityName(lat, lon);
