@@ -12,18 +12,18 @@ This is a very simple one page Application which takes current location and show
 
 #### APIs:
 
-- https://aladhan.com/prayer-times-api
-- Open Weather API
+- [Aladhan API](https://aladhan.com/prayer-times-api)
+- [Open Weather API](https://openweathermap.org/api)
 
 
 Things to do:
 
-- Showing today's times.
-- A good background with fine colors.
-- Selecting or searching by specific location/city.
-- Selecting Calculation method.
-- Selecting Mazhabs.
-- More.
+- [ ] Showing today's times.
+- [ ] A good background with fine colors.
+- [ ] Selecting or searching by specific location/city.
+- [ ] Selecting Calculation method.
+- [ ] Selecting Mazhabs.
+- [ ] More.
 
 
 Feel free to comment for sugesstions and improvements. 
