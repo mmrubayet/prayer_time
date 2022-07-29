@@ -89,6 +89,9 @@
                     message2: null,
                     my_latitude: null,
                     my_longitude: null,
+                    today: null,
+                    month: null,
+                    year: null,
                     city_data: null,
                     city_name: null,
                     city_state: null,
@@ -109,8 +112,8 @@
 
                         console.log("lat: " + pos.coords.latitude);
                         console.log("lon: " + pos.coords.longitude);
-                        
-                        this.get_Calendar(this.my_latitude, this.my_longitude );
+                        this.currentDateTime();
+                        this.get_Calendar(this.my_latitude, this.my_longitude, this.month, this.year);
                     }, err => {
                         this.message = err.message;
                         console.log("err.message: " + err.message);
@@ -133,16 +136,28 @@
                         this.message = null;
                     })
                 },
-                get_Calendar(lat, lon) {
+                get_Calendar(lat, lon, month, year) {
                     this.message = 'Loading...',
                     axios({
                         method: 'get',
-                        url: 'https://api.aladhan.com/v1/calendar?latitude=' + lat + '&longitude=' + lon + '&method=1&month=7&year=2022',
+                        url: `https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lon}&method=1&month=${month}&year=${year}`,
                     }).then(response => {
                         this.timing_list = response.data.data;
                         this.get_CityName(lat, lon);
                         this.message = null;
                     })
+                },
+                currentDateTime () {
+
+                    let current = new Date();
+                    this.today = current.getDate();
+                    this.month = current.getMonth() + 1;
+                    this.year = current.getFullYear();
+                    console.log(`Date: ${this.today}/${this.month}/${this.year}`);
+
+                    var formatted_date = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+                    console.log(formatted_date);
+
                 },
             },
         }).mount('#app')
