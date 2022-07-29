@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Time</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-select@latest"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Prayer Time</h1>
+        <!-- <h4>Dhaka</h4>
+        <h5>Time</h5> -->
+
+        <!-- vue app -->
+        <div id="app">
+            <div class="row">
+                <div class="col-6">
+
+                    <p class="text-secondary mt-n2 mb-n1">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="pl-2">{{ message }}</span>
+                    </p>
+                    <p>City: <span title="(lat, long)">{{ city_name }}, {{ city_state }}, {{ city_country }} </span></p>
+                    <p>Location: <span title="(lat, long)">{{ my_latitude }}, {{ my_longitude }}</span></p>
+                </div>
+                <div class="col-6 text-right">
+                    <a @click="get_geoData()" class="btn btn-sm btn-warning pr-2 mr-2">
+                        <i class="fas fa-sync"></i> Refresh
+                    </a>
+                </div>
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 8em;">Date</th>
+                                <th>Fajr</th>
+                                <th>Sunrise</th>
+                                <th>Dhuhr</th>
+                                <th>Asr</th>
+                                <th>Sunset</th>
+                                <th>Maghrib</th>
+                                <th>Isha</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr v-for="day in timing_list">
+                                <td>{{ day.date.readable }}</td>
+                                <td> {{ day.timings.Fajr }} </td>
+                                <td> {{ day.timings.Sunrise }} </td>
+                                <td> {{ day.timings.Dhuhr }} </td>
+                                <td> {{ day.timings.Asr }} </td>
+                                <td> {{ day.timings.Sunset }} </td>
+                                <td> {{ day.timings.Maghrib }} </td>
+                                <td> {{ day.timings.Isha }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- vue app ends -->
+
+    </div>
+
+    <script>
+
+        Vue.createApp({
+
+            data() {
+                return {
+                    loading: false,
+                    timing_list: null,
+                    message: 'hello',
+                    message2: null,
+                    my_latitude: null,
+                    my_longitude: null,
+                    city_data: null,
+                    city_name: null,
+                    city_state: null,
+                    city_country: null,
+                }
+            },
+            mounted() {
+                this.get_geoData();
+            },
+            methods: {
+                get_geoData() {
+                    navigator.geolocation.getCurrentPosition(pos => {
+                        my_latitude = pos.coords.latitude;
+                        my_longitude = pos.coords.longitude;
+
+                        this.my_latitude = my_latitude;
+                        this.my_longitude = my_longitude;
+
+                        console.log("lat: " + pos.coords.latitude);
+                        console.log("lon: " + pos.coords.longitude);
+                        
+                        this.get_Calendar(this.my_latitude, this.my_longitude );
+                    }, err => {
+                        this.message = err.message;
+                        console.log("err.message: " + err.message);
+                    }, options => {
+                        enableHighAccuracy: true;
+                        timeout: 5000;
+                        maximumAge: 0;
+                    })
+                },
+                get_CityName(lat, lon) {
+                    this.message = 'Loading...',
+                    axios({
+                        method: 'get', 
+                        url: `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=6e684d6becd04869ac72c67bebb84640`,
+                    }).then(response => {
+                        this.city_data = response.data[0];
+                        this.city_name = response.data[0].name;
+                        this.city_state = response.data[0].state;
+                        this.city_country = response.data[0].country;
+                        this.message = null;
+                    })
+                },
+                get_Calendar(lat, lon) {
+                    this.message = 'Loading...',
+                    axios({
+                        method: 'get',
+                        url: 'http://api.aladhan.com/v1/calendar?latitude=' + lat + '&longitude=' + lon + '&method=2&month=7&year=2022',
+                    }).then(response => {
+                        this.timing_list = response.data.data;
+                        this.get_CityName(lat, lon);
+                        this.message = null;
+                    })
+                },
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
