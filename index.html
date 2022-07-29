@@ -36,6 +36,7 @@
                     </p>
                     <p>City: <span title="(lat, long)">{{ city_name }}, {{ city_state }}, {{ city_country }} </span></p>
                     <p>Location: <span title="(lat, long)">{{ my_latitude }}, {{ my_longitude }}</span></p>
+                    <p>Last Updated: <span title="(lat, long)">{{ hour }}:{{ minute }}</span></p>
                 </div>
                 <div class="col-6 text-right">
                     <a @click="get_geoData()" class="btn btn-sm btn-warning pr-2 mr-2">
@@ -89,6 +90,8 @@
                     message2: null,
                     my_latitude: null,
                     my_longitude: null,
+                    minute: null,
+                    hour: null,
                     today: null,
                     month: null,
                     year: null,
@@ -150,6 +153,8 @@
                 currentDateTime () {
 
                     let current = new Date();
+                    this.minute = current.getMinutes();
+                    this.hour = current.getHours();
                     this.today = current.getDate();
                     this.month = current.getMonth() + 1;
                     this.year = current.getFullYear();
