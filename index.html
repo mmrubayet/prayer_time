@@ -169,7 +169,7 @@
                     this.message = 'Loading...',
                         axios({
                             method: 'get',
-                            url: `http://api.aladhan.com/v1/timings/${time}?latitude=${lat}&longitude=${lon}&method=1`,
+                            url: `https://api.aladhan.com/v1/timings/${time}?latitude=${lat}&longitude=${lon}&method=1`,
                         }).then(response => {
                             this.todays_timing = response.data.data;
                             this.message = null;
